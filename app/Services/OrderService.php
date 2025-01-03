@@ -7,6 +7,8 @@ use App\Models\Order;
 use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Utils\CacheKey;
+use Illuminate\Support\Facades\Cache;
 
 class OrderService
 {
@@ -294,6 +296,7 @@ class OrderService
     {
         $this->user->u = 0;
         $this->user->d = 0;
+        Cache::forget(CacheKey::get('LAST_SEND_EMAIL_REMIND_TRAFFIC', $this->user->id));    //重置流量时清除 最后发送流量邮件提醒 标记
     }
 
     private function buyByPeriod(Order $order, Plan $plan)

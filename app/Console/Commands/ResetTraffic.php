@@ -7,6 +7,8 @@ use Illuminate\Console\Command;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Services\TelegramService;
+use App\Utils\CacheKey;
+use Illuminate\Support\Facades\Cache;
 
 class ResetTraffic extends Command
 {
@@ -122,6 +124,9 @@ class ResetTraffic extends Command
                 'd' => 0
             ]);
         });
+        foreach ($users as $user_id) {
+            Cache::forget(CacheKey::get('LAST_SEND_EMAIL_REMIND_TRAFFIC', $user_id));    //重置流量时清除 最后发送流量邮件提醒 标记
+        }
     }
 
     private function resetByYearFirstDay($builder): void
@@ -134,6 +139,9 @@ class ResetTraffic extends Command
                 ]);
             });
         }
+        foreach ($users as $user_id) {
+            Cache::forget(CacheKey::get('LAST_SEND_EMAIL_REMIND_TRAFFIC', $user_id));    //重置流量时清除 最后发送流量邮件提醒 标记
+        }
     }
 
     private function resetByMonthFirstDay($builder): void
@@ -145,6 +153,9 @@ class ResetTraffic extends Command
                     'd' => 0
                 ]);
             });
+        }
+        foreach ($users as $user_id) {
+            Cache::forget(CacheKey::get('LAST_SEND_EMAIL_REMIND_TRAFFIC', $user_id));    //重置流量时清除 最后发送流量邮件提醒 标记
         }
     }
 
@@ -169,6 +180,9 @@ class ResetTraffic extends Command
                 'd' => 0
             ]);
         });
+        foreach ($users as $user_id) {
+            Cache::forget(CacheKey::get('LAST_SEND_EMAIL_REMIND_TRAFFIC', $user_id));    //重置流量时清除 最后发送流量邮件提醒 标记
+        }
     }
 
     private function retryTransaction($callback)
