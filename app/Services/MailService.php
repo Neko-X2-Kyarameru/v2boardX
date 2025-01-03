@@ -25,7 +25,7 @@ class MailService
             $expirationTime = 30 * 24 *3600;  //一个月提醒一次
         }
         else{
-            $expirationTime = $expired_at - $nowTime;  //过期时间内提醒一次
+            $expirationTime = $expired_at - $currentTime;  //过期时间内提醒一次
         }
         
         if (!Cache::put($flag, 1, $expirationTime)) return;
