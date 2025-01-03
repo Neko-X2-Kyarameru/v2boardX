@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use ReCaptcha\ReCaptcha;
+use App\Utils\TurnstileLaravel;
 use Illuminate\Support\Facades\RateLimiter;
 
 use function PHPUnit\Framework\isEmpty;
@@ -37,9 +38,9 @@ class CommController extends Controller
         RateLimiter::hit($ip, 60);
 
         if ((int)config('v2board.recaptcha_enable', 0)) {
-            $recaptcha = new ReCaptcha(config('v2board.recaptcha_key'));
-            $recaptchaResp = $recaptcha->verify($request->input('recaptcha_data'));
-            if (!$recaptchaResp->isSuccess()) {
+            $turnstile = new TurnstileLaravel;
+            $turnstileResp = $turnstile->validate($request->input('recaptcha_data'));
+            if ($turnstileResp['status'] != true) {
                 abort(500, __('Invalid code is incorrect'));
             }
         }

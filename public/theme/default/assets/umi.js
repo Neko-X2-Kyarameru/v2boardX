@@ -18249,7 +18249,7 @@
         }
         function _() {
             E();
-            return "https://www.recaptcha.net/recaptcha/api.js?onload=".concat(x, "&render=explicit")
+            return "https://challenges.cloudflare.com/turnstile/v0/api.js?onload=".concat(x, "&compat=recaptcha")
         }
         var k = w(_, {
             callbackName: x,
