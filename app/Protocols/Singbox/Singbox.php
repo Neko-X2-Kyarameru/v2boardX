@@ -106,7 +106,18 @@ class Singbox
         $array['method'] = $server['cipher'];
         $array['password'] = $password;
         $array['domain_resolver'] = 'local';
-
+        if (isset($server['obfs']) && $server['obfs'] === 'http') {
+            $array['plugin'] = 'obfs-local';
+            $plugin_opts_parts = [];
+            $plugin_opts_parts[] = "obfs=" . $server['obfs'];
+            if (isset($server['obfs-host'])) {
+                $plugin_opts_parts[] = "obfs-host=" . $server['obfs-host'];
+            }
+            if (isset($server['obfs-path'])) {
+                $plugin_opts_parts[] = "path=" . $server['obfs-path'];
+            }
+            $array['plugin_opts'] = implode(';', $plugin_opts_parts);
+        }
         return $array;
     }
 
@@ -284,6 +295,7 @@ class Singbox
         $array['tls'] = [
             'enabled' => true,
             'insecure' => $server['insecure'] ? true : false,
+            'alpn' => ['h3'],
             'disable_sni' => $server['disable_sni'] ? true : false,
         ];
         if (isset($server['server_name'])) {
