@@ -54,7 +54,7 @@ class TurnstileLaravel
         }
 
         $json = json_decode($result);
-        if ($json && $json->success) {
+        if (isset($json->success) && $json->success) {
             return [
                 'status' => 1,
             ];
@@ -62,7 +62,7 @@ class TurnstileLaravel
 
         return [
             'status' => 0,
-            'error' => '验证码验证失败',
+            'error' => '人机验证失败',
             'turnstile_response' => $json,
         ];
     }
