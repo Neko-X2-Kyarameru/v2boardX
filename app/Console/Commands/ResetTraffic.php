@@ -132,6 +132,7 @@ class ResetTraffic extends Command
     private function resetByYearFirstDay($builder): void
     {
         if ((string)date('md') === '0101') {
+            $users = $builder->pluck('id')->toArray();
             $this->retryTransaction(function () use ($builder) {
                 $builder->update([
                     'u' => 0,
@@ -147,6 +148,7 @@ class ResetTraffic extends Command
     private function resetByMonthFirstDay($builder): void
     {
         if ((string)date('d') === '01') {
+            $users = $builder->pluck('id')->toArray();
             $this->retryTransaction(function () use ($builder) {
                 $builder->update([
                     'u' => 0,
