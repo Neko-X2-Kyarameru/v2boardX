@@ -60,7 +60,7 @@ class StripeALL {
             'confirm' => true,
             'payment_method' => $stripePaymentMethod->id,
             'automatic_payment_methods' => ['enabled' => true],
-            'statement_descriptor' => 'user-#' . $order['user_id'] . '-' . substr($order['trade_no'], -8),
+            'statement_descriptor_suffix' => 'user-#' . $order['user_id'] . '-' . substr($order['trade_no'], -8),
             'metadata' => [
                 'user_id' => $order['user_id'],
                 'customer_email' => $userEmail,
