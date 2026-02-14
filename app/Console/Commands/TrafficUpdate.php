@@ -41,6 +41,9 @@ class TrafficUpdate extends Command
     public function handle()
     {
         ini_set('memory_limit', -1);
+        if (Redis::exists('traffic_reset_lock')) {
+            return;
+        }
         $uploads = Redis::hgetall('v2board_upload_traffic');
         Redis::del('v2board_upload_traffic');
         $downloads = Redis::hgetall('v2board_download_traffic');
@@ -49,21 +52,31 @@ class TrafficUpdate extends Command
             return;
         }
 
-        $users = User::whereIn('id', array_keys($downloads))->get();
+        $users = User::whereIn('id', array_keys($downloads))->get(['id', 'u', 'd']);
         $time = time();
+        $casesU = [];
+        $casesD = [];
+        $idList = [];
+
+        foreach ($users as $user) {
+            $upload = $uploads[$user->id] ?? 0;
+            $download = $downloads[$user->id] ?? 0;
+
+            $casesU[] = "WHEN {$user->id} THEN " . ($user->u + $upload);
+            $casesD[] = "WHEN {$user->id} THEN " . ($user->d + $download);
+            $idList[] = $user->id;
+        }
+        $idListStr = implode(',', $idList);
+        $casesUStr = implode(' ', $casesU);
+        $casesDStr = implode(' ', $casesD);
+        $sql = "UPDATE v2_user SET u = CASE id {$casesUStr} END, d = CASE id {$casesDStr} END, t = {$time}, updated_at = {$time} WHERE id IN ({$idListStr})";
         try {
             DB::beginTransaction();
-            foreach ($users as $user) {
-                $user->update([
-                    't' => $time,
-                    'u' => $user->u + $uploads[$user->id],
-                    'd' => $user->d + $downloads[$user->id],
-                ]);
-            }
+            DB::statement($sql);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            $this->error('流量更新失败: ' . $e->getMessage());
+            \Log::error('流量更新失败: ' . $e->getMessage());
             return;
         }
     }

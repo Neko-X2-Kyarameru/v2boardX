@@ -112,17 +112,17 @@ class UserController extends Controller
                 abort(500, __('You do not allow to renew the subscription'));
             }
             switch ($reset_period) {
-                case 30:
-                    break;
                 case 1:
                     $reset_day = 30;
                     $reset_period = 30;
                     break;
-                case 365:
+                case 30:
                     break;
                 case 12:
                     $reset_day = 365;
                     $reset_period = 365;
+                    break;
+                case 365:
                     break;
                 default:
                     abort(500, __('Invalid reset period'));
@@ -431,6 +431,9 @@ class UserController extends Controller
         $user->commission_balance = $user->commission_balance - $request->input('transfer_amount');
         $user->balance = $user->balance + $request->input('transfer_amount');
         $order->status = 3;
+        $order->total_amount = 0;
+        $order->surplus_amount = $request->input('transfer_amount');
+        $order->callback_no = '佣金划转 Commission transfer';
         if (!$order->save()||!$user->save()) {
             DB::rollback();
             abort(500, __('Transfer failed'));
