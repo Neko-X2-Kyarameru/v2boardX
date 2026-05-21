@@ -31069,22 +31069,33 @@
                 }, {
                     alive_ip: d.alive_ip,
                     device_limit: d.device_limit == null ? "∞" : d.device_limit
-                })))), y >= 0 && !Object(p["h"])(d.expired_at) && (null === d || void 0 === d ? void 0 : null === (e = d.plan) || void 0 === e ? void 0 : e.reset_price) && l.a.createElement("div", {
-                    className: "mb-4"
+                })))), Object(p["m"])(d) && l.a.createElement("div", {
+                    className: "mb-4",
+                    style: { display: "inline-block", marginRight: "10px" }
+                }, l.a.createElement(i["a"], {
+                    type: "primary",
+                    onClick: ()=>h.a.push("/plan/" + d.plan_id)
+                }, Object(b["formatMessage"])({
+                    id: "\u7eed\u8d39\u8ba2\u9605"
+                }))), y >= 80 && !Object(p["h"])(d.expired_at) && (null === d || void 0 === d ? void 0 : null === (e = d.plan) || void 0 === e ? void 0 : e.reset_price) && l.a.createElement("div", {
+                    className: "mb-4",
+                    style: { display: "inline-block", marginRight: "10px" }
                 }, l.a.createElement(i["a"], {
                     type: "primary",
                     onClick: ()=>this.resetPackage()
                 }, Object(b["formatMessage"])({
                     id: "\u8d2d\u4e70\u6d41\u91cf\u91cd\u7f6e\u5305"
                 }))), d.allow_new_period && y >= 100 && !Object(p["h"])(d.expired_at) ? l.a.createElement("div", {
-                    className: "mb-4"
+                    className: "mb-4",
+                    style: { display: "inline-block", marginRight: "10px" }
                 }, l.a.createElement(i["a"], {
                     type: "primary",
                     onClick: ()=>this.newPeriod()
                 }, Object(b["formatMessage"])({
                     id: "\u63d0\u524d\u5f00\u542f\u6d41\u91cf\u5468\u671f"
                 }))) : "", Object(p["h"])(d.expired_at) && l.a.createElement("div", {
-                    className: "mb-4"
+                    className: "mb-4",
+                    style: { display: "inline-block", marginRight: "10px" }
                 }, l.a.createElement(i["a"], {
                     type: "primary",
                     onClick: ()=>h.a.push(Object(p["m"])(d) ? "/plan/" + d.plan_id : "/plan")
