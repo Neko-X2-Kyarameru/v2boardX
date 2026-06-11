@@ -25,7 +25,7 @@ class UAfilter
                 }
             }
         }
-        if (strpos($request->header('User-Agent'), 'MicroMessenger') !== false || strpos($request->header('User-Agent'), 'QQ/') !== false) {
+        if (strpos($request->header('User-Agent'), 'MicroMessenger') !== false || strpos($request->header('User-Agent'), 'QQ/') !== false || strpos($request->header('User-Agent'), 'QQEX/') !== false) {
             $html = <<<HTML
 <!DOCTYPE html>
 <html lang="en">
